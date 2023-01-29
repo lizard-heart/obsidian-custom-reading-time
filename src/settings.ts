@@ -3,14 +3,18 @@ import ReadingTime from "./main"
 
 export interface ReadingTimeSettings {
   readingSpeed: number;
+  readingSpeed2: number;
   format: string;
   appendText: string;
+  appendText2: string;
 }
 
 export const RT_DEFAULT_SETTINGS: ReadingTimeSettings = {
-  readingSpeed: 200,
+  readingSpeed: 150,
+  readingSpeed2: 250,
   format: 'default',
-  appendText: 'read'
+  appendText: 'aloud',
+  appendText2: 'read'
 }
 
 export class ReadingTimeSettingsTab extends PluginSettingTab {
@@ -28,10 +32,10 @@ export class ReadingTimeSettingsTab extends PluginSettingTab {
       containerEl.empty()
 
       new Setting(containerEl)
-        .setName("Reading speed")
-        .setDesc("Words per minute used for reading speed (default: 200).")
+        .setName("Slow reading speed")
+        .setDesc("Words per minute used for reading speed (default: 150 – reading aloud).")
         .addText((text) => {
-          text.setPlaceholder("Example: 200")
+          text.setPlaceholder("Example: 150")
             .setValue(this.plugin.settings.readingSpeed.toString())
             .onChange(async (value) => {
               this.plugin.settings.readingSpeed = parseInt(value.trim())
@@ -39,6 +43,43 @@ export class ReadingTimeSettingsTab extends PluginSettingTab {
                 .then( this.plugin.calculateReadingTime )
             })
         });
+      
+      new Setting(this.containerEl)
+        .setName("Append Text")
+        .setDesc("Append 'read' to formatted string.")
+        .addText(text => text
+          .setValue(this.plugin.settings.appendText)
+          .onChange(async (value) => {
+            this.plugin.settings.appendText = value.trim();
+            await this.plugin.saveSettings()
+              .then( this.plugin.calculateReadingTime )
+          })
+        );
+
+      new Setting(containerEl)
+        .setName("Fast reading speed")
+        .setDesc("Words per minute used for reading speed (default: 250 – slightly above-average reading).")
+        .addText((text) => {
+          text.setPlaceholder("Example: 250")
+            .setValue(this.plugin.settings.readingSpeed2.toString())
+            .onChange(async (value) => {
+              this.plugin.settings.readingSpeed2 = parseInt(value.trim())
+              await this.plugin.saveSettings()
+                .then(this.plugin.calculateReadingTime)
+            })
+        });
+
+      new Setting(this.containerEl)
+        .setName("Append Text")
+        .setDesc("Append 'read' to formatted string.")
+        .addText(text => text
+          .setValue(this.plugin.settings.appendText2)
+          .onChange(async (value) => {
+            this.plugin.settings.appendText2 = value.trim();
+            await this.plugin.saveSettings()
+              .then(this.plugin.calculateReadingTime)
+          })
+        );
 
       new Setting(this.containerEl)
         .setName("Format")
@@ -53,20 +94,9 @@ export class ReadingTimeSettingsTab extends PluginSettingTab {
           .onChange(async (value) => {
             this.plugin.settings.format = value;
             await this.plugin.saveSettings()
-              .then( this.plugin.calculateReadingTime )
+              .then(this.plugin.calculateReadingTime)
           })
         );
-
-      new Setting(this.containerEl)
-        .setName("Append Text")
-        .setDesc("Append 'read' to formatted string.")
-        .addText(text => text
-          .setValue(this.plugin.settings.appendText)
-          .onChange(async (value) => {
-            this.plugin.settings.appendText = value.trim();
-            await this.plugin.saveSettings()
-              .then( this.plugin.calculateReadingTime )
-          })
-        );
+      
     }
   }

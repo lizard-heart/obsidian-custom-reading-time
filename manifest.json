@@ -1,10 +1,10 @@
 {
-  "id": "obsidian-reading-time",
-  "name": "Reading Time",
-  "description": "Add the current note's reading time to Obsidian's status bar.",
+  "id": "obsidian-custom-reading-time",
+  "name": "Custom Reading Time",
+  "description": "Add the current note's reading time to Obsidian's status bar in two custom reading speeds.",
   "version": "1.1.1",
   "minAppVersion": "0.12.17",
   "isDesktopOnly": false,
-  "author": "avr",
-  "authorUrl": "https://github.com/avr"
+  "author": "Henry Gustafson",
+  "authorUrl": "https://github.com/lizard-heart"
 }
