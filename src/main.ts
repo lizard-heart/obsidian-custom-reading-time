@@ -61,11 +61,20 @@ class ReadingTimeModal extends Modal {
     this.plugin = plugin;
 	}
 
+  readingTime = (text: string, plugin: ReadingTime) => {
+    return readingTimeText(text, plugin);
+  };
+
+  readingTime2 = (text: string, plugin: ReadingTime) => {
+    return readingTimeText2(text, plugin);
+  };
+
 	onOpen() {
 		const {contentEl, titleEl} = this;
     titleEl.setText('Reading Time of Selected Text');
-    const stats = readingTime(this.editor.getSelection(), this.plugin);
-		contentEl.setText(`${stats} (at ${this.plugin.settings.readingSpeed} wpm)`);
+    const stats = this.readingTime(this.editor.getSelection(), this.plugin);
+    const stats2 = this.readingTime2(this.editor.getSelection(), this.plugin);
+		contentEl.setText(`${stats},\n${stats2}`);
 	}
 
 	onClose() {
